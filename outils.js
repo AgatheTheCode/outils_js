@@ -1,20 +1,20 @@
-
 /**
- * Adds event listener to the target element.
+ * Attaches an event listener to the target element.
  * If the clicked element is not the target, it executes the specified action.
+ *
  * @param {HTMLElement} target - The element to attach the event listener to.
- * @param {Function} action - The action to execute when the click event is triggered.
- * @param {HTMLElement} source - The element to listen for click events on. Defaults to the document.
- * @param delay delay - The delay in milliseconds between each execution of the action.
+ * @param {string} type - The type of event to listen for. Defaults to "click".
+ * @param {Function} action - The action to execute when the event is triggered.
+ * @param {HTMLElement} source - The element to listen for events on. Defaults to the document.
+ * @param {number} delay - The delay in milliseconds between each execution of the action.
  * @returns {HTMLElement} - The target element.
  */
-function eventHandler(target, action, source = document, delay = 50) {
-    source.addEventListener("click", throttle(function (e) {
+function eventHandler(target,type = "click", action, source = document, delay = 50) {
+    source.addEventListener(type, throttle(function (e) {
         action(e);
     }, delay));
     return target;
 }
-
 
 /**
  * Makes an AJAX request to the specified URL with the given type and action.

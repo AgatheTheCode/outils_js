@@ -16,21 +16,34 @@ function eventHandler(target,type = "click", action, source = document, delay = 
     return target;
 }
 
+
 /**
- * Makes an AJAX request to the specified URL with the given type and action.
+ * Makes an AJAX request to the specified URL with the given type, action, and data.
  * @param {string} url - The URL to send the request to.
  * @param {string} type - The type of request (e.g. "GET", "POST").
  * @param {string} action - The action to be performed on the server.
- */function makeRequest(url, type, action) {
+ * @param {object} data - Additional data to send with the request.
+ * @param {function} callback - The callback function to handle the response.
+ */
+function makeRequest(url, type, action, data, callback) {
     let xhr = new XMLHttpRequest();
     if (!xhr) {
         return false;
     }
-    let alertContents = ""; //donne le readyState et le status de la requête
-    alertContents = xhr.onreadystatechange;
     xhr.open(type, url, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send(action);
+
+    let queryString = "action=" + action + "&";
+    queryString += Object.keys(data)
+        .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+        .join("&");
+    xhr.send(queryString);
+
+    xhr.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            callback(this.responseText);
+        }
+    };
 }
 /**
  * Throttles the execution of a callback function.

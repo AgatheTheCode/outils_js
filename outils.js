@@ -113,3 +113,13 @@ function geoLocalisation() {
         }
     });
 }
+
+/**
+ * Checks if an element is overflowing.
+ *
+ * @param {Element} element - The element to check for overflow.
+ * @return {boolean} True if the element is overflowing, false otherwise.
+ */
+function isOverflown(element) {
+    return (element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth);
+}

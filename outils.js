@@ -84,3 +84,32 @@ function waitForElm(selector, parent = document) {
         });
     });
 }
+
+
+/**
+ * Retrieves the geolocation of the user and updates the localisation object.
+ *
+ * @return {Promise} A promise that resolves when the localisation object is updated, or rejects with an error message.
+ */
+function geoLocalisation() {
+    return new Promise((resolve, reject) => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(async function (position) {
+                let lat = position.coords.latitude;
+                let long = position.coords.longitude;
+                let response = await getLocalisation(lat, long).then(r => r).catch(e => console.log(e));
+                if (response) {
+                    let ville = response.features[0].properties.city;
+                    let codePostal = response.features[0].properties.postcode;
+                    localisation.ville = ville;
+                    localisation.codePostal = codePostal;
+                    resolve();
+                } else {
+                    reject("Failed to get localisation");
+                }
+            });
+        } else {
+            reject("Geolocation not supported");
+        }
+    });
+}
